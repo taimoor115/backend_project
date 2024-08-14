@@ -1,3 +1,4 @@
+
 import User from "../models/user.models.js";
 import ApiError from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -17,32 +18,38 @@ export const registerUser = asyncHandler(async (req,res) => {
 
   const {username, email, fullname, password} = req.body;
 
-  if([fullname, email, username, password].some((field) => field.trim === "")) {
-    return new ApiError(400,"All fields are required")
+  if([fullname, email, username, password].some((field) => field?.trim() === "")) {
+    
+    throw new ApiError(400,"All fields are required")
   }
-  const existedUser = await User.findOne({
-    $or: [{email}, {username}]
-  });
-
+    const existedUser = await User.findOne({
+        $or: [{ username }, { email }]
+    })
+    
   if(existedUser) {
-    return new ApiError(400,"User already exists")
-  }
 
+    throw new ApiError(400,"User already exists")
+  }  
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
-
   if(!avatarLocalPath) {
-    return new ApiError("400", "Avatar is required");
+    
+    throw new ApiError("400", "Avatar is required");
   }
 
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  const avatar = await uploadOnCloudinary(avatarLocalPath);  
 
-  if(!avatar) {
-    return new ApiError("400", "Avatar is required")
+  if(!avatar) {    
+    throw new ApiError("400", "Avatar is required")
   }
+
+  let coverImageLocalPath;
+
+  if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    coverImageLocalPath = req.files.coverImage[0].path
+  }
+
 
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
-
 
   const user = await User.create({
     fullname,
@@ -56,7 +63,7 @@ export const registerUser = asyncHandler(async (req,res) => {
   const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
   if(!createdUser) {
-    return new ApiError(500, "Something went wrong while creating user")
+    throw new ApiError(500, "Something went wrong while creating user")
   }
 
 
@@ -65,4 +72,3 @@ export const registerUser = asyncHandler(async (req,res) => {
   )
 
 })
-
