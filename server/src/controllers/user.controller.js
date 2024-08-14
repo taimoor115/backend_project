@@ -88,7 +88,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "username is required");
   }
 
-  const user = await User.findById({ username });
+  const user = await User.findOne({ username });
 
   if (!user) {
     throw new ApiError(400, "Invalid username and password");
