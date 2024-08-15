@@ -4,6 +4,7 @@ import { upload } from "../middleware/multer.middleware.js";
 import {
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
@@ -18,7 +19,7 @@ router.route("/register").post(
 );
 
 router.route("/login").post(loginUser);
-
+router.route("/refresh-token").post(refreshAccessToken);
 // secured route
 router.route("/logout").post(verifyJWT, logoutUser);
 export default router
