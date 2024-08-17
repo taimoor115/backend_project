@@ -28,4 +28,22 @@ try {
 }
 }
 
+export const deleteCloudinaryImage = async (imageId) => {
+  try {
+    const destroyImage = await cloudinary.uploader.destroy(imageId);
+
+    if (destroyImage.result === "ok") {
+      console.log("Image deleted successfully....");
+    } else {
+      console.log("Error occur while deleting the image");
+    }
+
+    return destroyImage;
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(400, "Error occur while deleting the image");
+  }
+};
+
+
 export default uploadOnCloudinary;
