@@ -271,7 +271,7 @@ export const updateAvatar = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "Avatar updated successfully..."));
 });
 
-const updateUserCoverImage = asyncHandler(async (req, res) => {
+export const updateUserCoverImage = asyncHandler(async (req, res) => {
   const coverImageLocalPath = req.file?.path;
 
   if (!coverImageLocalPath) {
