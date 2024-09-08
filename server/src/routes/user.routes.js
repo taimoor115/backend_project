@@ -5,6 +5,7 @@ import {
   changeCurrentPassword,
   getCurrentUser,
   getUserProfile,
+  getWatchHistory,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -38,5 +39,6 @@ router
 // secured route
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/profile/:username").get(verifyJWT, getUserProfile);
+router.route("/history").get(verifyJWT, getWatchHistory);
 
 export default router
