@@ -4,6 +4,7 @@ import { upload } from "../middleware/multer.middleware.js";
 import {
   changeCurrentPassword,
   getCurrentUser,
+  getUserProfile,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -36,4 +37,6 @@ router
 
 // secured route
 router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/profile/:username").get(verifyJWT, getUserProfile);
+
 export default router
